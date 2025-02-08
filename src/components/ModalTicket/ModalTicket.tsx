@@ -3,6 +3,7 @@ import { QRCodeCanvas } from "qrcode.react";
 import html2canvas from "html2canvas";
 import { API_URL } from "../../config";
 import { Textfit } from "react-textfit";
+import { toast, ToastContainer } from 'react-toastify';
 
 interface ModalTicketProps {
   isOpen: boolean;
@@ -29,40 +30,67 @@ export const ModalTicket = ({ isOpen, onClose, ticketInfo }: ModalTicketProps): 
     }
   };
 
+  //const captureAndSendEmail = async () => {
+  //  if (modalRef.current) {
+  //    const canvas = await html2canvas(modalRef.current);
+  //    const imageData = canvas.toDataURL("image/png");
+  //
+  //    try {
+  //      const response = await fetch(`${API_URL}/api/send-ticket-email`, {
+  //        method: "POST",
+  //        headers: {
+  //          "Content-Type": "application/json",
+  //        },
+  //        body: JSON.stringify({
+  //          imageData,
+  //          email: ticketInfo.email,
+  //        }),
+  //      });
+  //
+  //      if (response.ok) {
+  //      } else {
+  //        console.error("Erro ao enviar o e-mail:", await response.text());
+  //      }
+  //
+  //      const link = document.createElement("a");
+  //      link.href = imageData;
+  //      link.download = `${ticketInfo.eventName}-ticket.png`;
+  //      document.body.appendChild(link);
+  //      link.click();
+  //      document.body.removeChild(link);
+  //
+  //    } catch (error) {
+  //      console.error("Erro ao enviar o e-mail ou baixar a imagem:", error);
+  //    }
+  //  }
+  //};
+
   const captureAndSendEmail = async () => {
     if (modalRef.current) {
       const canvas = await html2canvas(modalRef.current);
       const imageData = canvas.toDataURL("image/png");
 
       try {
-        const response = await fetch(`${API_URL}/api/send-ticket-email`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            imageData,
-            email: ticketInfo.email,
-          }),
+        toast({
+          title: "Servidor de e-mail fora do ar, envio de ticket suspenso temporariamente",
+          status: "warning",
+          duration: 5000,
+          isClosable: true,
+          position: "top-right"
         });
 
-        if (response.ok) {
-        } else {
-          console.error("Erro ao enviar o e-mail:", await response.text());
-        }
-
-        const link = document.createElement("a");
-        link.href = imageData;
-        link.download = `${ticketInfo.eventName}-ticket.png`;
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-
+       //const link = document.createElement("a");
+       //link.href = imageData;
+       //link.download = `${ticketInfo.eventName}-ticket.png`;
+       //document.body.appendChild(link);
+       //link.click();
+       //document.body.removeChild(link);
       } catch (error) {
-        console.error("Erro ao enviar o e-mail ou baixar a imagem:", error);
+        console.error("Erro ao baixar a imagem:", error);
       }
     }
   };
+
 
   useEffect(() => {
     if (isOpen) {
@@ -98,6 +126,8 @@ export const ModalTicket = ({ isOpen, onClose, ticketInfo }: ModalTicketProps): 
     <div className="fixed inset-0 z-50 flex items-center justify-center"
       onClick={handleClickOutside}
       style={{ backdropFilter: 'blur(5px)' }}>
+
+      <ToastContainer />
       <div ref={modalRef} className="fixed w-[394px] h-[694px]">
         <div className="relative h-[694px]">
           <div className="absolute w-[394px] h-[686px] top-0 left-0">
