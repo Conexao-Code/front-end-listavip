@@ -1,0 +1,1 @@
+export { Esqueci } from "./Esqueci";

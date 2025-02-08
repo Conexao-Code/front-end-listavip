@@ -1,0 +1,1 @@
+export { CadastroPromoters } from "./Cadastro";

@@ -1,0 +1,1 @@
+export { ModalPromoterCadastro } from "./ModalPromoterCadastro";

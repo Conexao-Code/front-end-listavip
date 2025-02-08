@@ -1,0 +1,1 @@
+export { ModalAntecipado } from "./ModalAntecipado";

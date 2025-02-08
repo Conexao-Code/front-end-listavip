@@ -1,0 +1,1 @@
+export { ConfirmarAniversario } from "./ConfirmarAniversario";

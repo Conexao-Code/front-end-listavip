@@ -1,0 +1,1 @@
+export { ModalTicketAntecipado } from "./ModalTicketAntecipado";

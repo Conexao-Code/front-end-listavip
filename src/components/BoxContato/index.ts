@@ -1,0 +1,1 @@
+export { BoxContato } from "./BoxContato";

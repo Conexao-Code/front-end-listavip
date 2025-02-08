@@ -1,0 +1,38 @@
+<svg width="100" height="100" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <pattern id="grid-pattern" width="100" height="100" patternUnits="userSpaceOnUse">
+      <!-- Linhas horizontais -->
+      <path 
+        d="M 0 50 L 100 50" 
+        stroke="#E1FF01" 
+        stroke-width="0.5" 
+        stroke-opacity="0.1"
+      />
+      <!-- Linhas verticais -->
+      <path 
+        d="M 50 0 L 50 100" 
+        stroke="#E1FF01" 
+        stroke-width="0.5" 
+        stroke-opacity="0.1"
+      />
+      <!-- Pontos de conexão -->
+      <circle 
+        cx="50" 
+        cy="50" 
+        r="1" 
+        fill="#E1FF01" 
+        fill-opacity="0.1"
+      />
+      <!-- Hexagon pattern base -->
+      <path 
+        d="M25 0 L75 0 L100 50 L75 100 L25 100 L0 50 Z" 
+        stroke="#E1FF01" 
+        stroke-width="0.3" 
+        stroke-opacity="0.05" 
+        fill="none"
+      />
+    </pattern>
+  </defs>
+  
+  <rect width="100%" height="100%" fill="url(#grid-pattern)"/>
+</svg>

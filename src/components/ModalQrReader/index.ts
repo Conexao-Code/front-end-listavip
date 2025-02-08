@@ -1,0 +1,1 @@
+export { ModalQrReader } from "./ModalQrReader";

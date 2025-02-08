@@ -1,0 +1,1 @@
+export { ConteudoDesktop } from "./ConteudoDesktop";

@@ -1,0 +1,1 @@
+export { RelatorioAdmin } from "./RelatorioAdmin";

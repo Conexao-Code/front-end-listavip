@@ -1,0 +1,1 @@
+export { ModalCadastro } from "./ModalCadastro";

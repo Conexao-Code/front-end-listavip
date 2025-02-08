@@ -1,0 +1,1 @@
+export { ConfirmarPresenca } from "./ConfirmarPresenca";

@@ -1,0 +1,1 @@
+export { ModalPlano } from "./ModalPlano";

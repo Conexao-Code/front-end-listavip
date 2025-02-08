@@ -1,0 +1,1 @@
+export { RelatorioPromoter } from "./RelatorioPromoter";

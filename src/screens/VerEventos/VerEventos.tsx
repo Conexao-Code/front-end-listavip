@@ -1,0 +1,115 @@
+import React, { useState, useEffect, JSX } from "react";
+import { SidebarAdmin } from "../../components/SidebarAdmin";
+import { Header } from "../../components/Header";
+import { useTheme } from "../../ThemeContext";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import { FiCalendar } from "react-icons/fi";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
+import { API_URL } from "../../config";
+
+interface EventMetric {
+    metric: string;
+    quantity: number;
+}
+
+export const VerEventos = (): JSX.Element => {
+    const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+    const { theme } = useTheme();
+    const [revenueDate, setRevenueDate] = useState<Date | null>(new Date());
+    const [eventMetrics, setEventMetrics] = useState<EventMetric[]>([]);
+
+    const toggleSidebar = () => {
+        setIsSidebarOpen(!isSidebarOpen);
+    };
+
+    const fetchEventMetrics = async () => {
+        try {
+            if (revenueDate) {
+                const month = revenueDate.getMonth() + 1;
+                const year = revenueDate.getFullYear();
+                const response = await fetch(`${API_URL}/api/event-metrics?month=${month}&year=${year}`);
+                if (response.ok) {
+                    const data = await response.json();
+                    setEventMetrics(data);
+                } else {
+                    toast.error("Erro ao carregar dados de eventos.");
+                }
+            }
+        } catch (error) {
+            console.error("Erro ao buscar dados de eventos", error);
+            toast.error("Erro ao buscar dados de eventos.");
+        }
+    };
+
+    useEffect(() => {
+        fetchEventMetrics();
+    }, [revenueDate]);
+
+    return (
+        <div
+            className="flex flex-col lg:flex-row h-screen"
+            style={{
+                backgroundColor: theme === "dark" ? "#22252A" : "#D6D6D6",
+            }}
+        >
+            <SidebarAdmin isOpen={isSidebarOpen} toggleSidebar={toggleSidebar} />
+            <ToastContainer />
+            <div className="flex-1 overflow-y-auto px-4 py-4 lg:px-6 lg:py-6 mt-[70px] w-full max-w-[95vw] lg:max-w-[1880px] mx-auto">
+                <div className="flex flex-col items-start gap-4 lg:flex-row lg:items-center lg:justify-between">
+                    <div className="text-left w-full">
+                        <h1 className="font-semibold [font-family:'Poppins',Helvetica] text-3xl" style={{ color: theme === "dark" ? "#F1F1F1" : "#000000" }}>Quantidade de Eventos Realizados</h1>
+                    </div>
+                </div>
+
+                <img className="w-full h-3 object-cover mt-4" alt="Divisor" src="https://c.animaapp.com/tyxgDvEv/img/divisor-7.svg" />
+
+                <div className="mt-6 p-4 overflow-x-auto w-full rounded-lg border border-solid border-[#575560]">
+                    <div className="flex justify-between items-center mb-4">
+                        <h2 className="text-[#F1F1F1] font-bold text-lg">Quantidade de eventos</h2>
+                        <div className="flex justify-end w-full lg:w-auto">
+                            <DatePicker
+                                dateFormat="MM/yyyy"
+                                showMonthYearPicker
+                                selected={revenueDate}
+                                onChange={(date) => setRevenueDate(date)}
+                                customInput={
+                                    <button className="flex items-center justify-center px-3 py-1.5 sm:px-4 sm:py-2 rounded-full text-xs sm:text-sm font-medium" style={{ backgroundColor: "#E1FF01", color: "#22252A" }}>
+                                        <FiCalendar className="mr-1 sm:mr-2" size={16} />
+                                        {revenueDate ? revenueDate.toLocaleDateString('pt-BR', { month: 'long', year: 'numeric' }) : "Selecionar Mês"}
+                                    </button>
+                                }
+                            />
+                        </div>
+                    </div>
+
+                    <div className="min-w-full h-full bg-transparent text-center">
+                        <div className="w-full">
+                            <table className="w-full bg-transparent" style={{ tableLayout: 'fixed' }}>
+                                <thead>
+                                    <tr className="bg-[#302F38]" style={{ backgroundColor: theme === "dark" ? "#42404a" : "#CACBCB" }}>
+                                        <th className="p-2 sm:p-3 font-medium text-[#F1F1F1] text-xs rounded-tl-lg rounded-bl-lg sm:text-sm w-1/4">Métricas</th>
+                                        <th className="p-2 sm:p-3 font-medium text-[#F1F1F1] text-xs sm:text-sm w-1/4">Quantidade</th>
+                                        <th className="p-2 sm:p-3 font-medium text-[#F1F1F1] text-xs sm:text-sm w-1/4">Período</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {eventMetrics.map((metric) => (
+                                        <tr key={metric.metric}>
+                                            <td className="p-2 font-bold sm:p-3 text-xs sm:text-sm text-[#F1F1F1]">{metric.metric}</td>
+                                            <td className="p-2 font-bold sm:p-3 text-xs sm:text-sm text-[#F1F1F1]">{metric.quantity}</td>
+                                            <td className="p-2 font-bold sm:p-3 text-xs sm:text-sm text-[#F1F1F1]">
+                                                {revenueDate?.toLocaleDateString('pt-BR', { month: 'long', year: 'numeric' })}
+                                            </td>
+                                        </tr>
+                                    ))}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    );
+};

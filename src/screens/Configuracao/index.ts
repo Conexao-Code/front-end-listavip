@@ -1,0 +1,1 @@
+export { Configuracao } from "./Configuracao";

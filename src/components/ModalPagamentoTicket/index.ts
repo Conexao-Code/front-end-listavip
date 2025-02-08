@@ -1,0 +1,1 @@
+export { ModalPagamentoTicket } from "./ModalPagamentoTicket";

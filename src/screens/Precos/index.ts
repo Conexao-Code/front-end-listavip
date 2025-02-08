@@ -1,0 +1,1 @@
+export { Precos } from "./Precos";

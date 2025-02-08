@@ -1,0 +1,1 @@
+export { Pagamentos } from "./Pagamentos";

@@ -1,0 +1,1 @@
+export { CriacaoEvento } from "./CriacaoEvento";

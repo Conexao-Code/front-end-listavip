@@ -1,0 +1,1 @@
+export { ModalPagamentoPlano } from "./ModalPagamentoPlano";
