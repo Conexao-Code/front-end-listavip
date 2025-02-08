@@ -8,7 +8,7 @@
     "dev": "parcel --host 0.0.0.0",
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build",
-    "start": "parcel --host 0.0.0.0 --no-cache"
+    "start": "parcel"
   },
   "dependencies": {
     "@chakra-ui/react": "^2.10.4",
