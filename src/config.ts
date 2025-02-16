@@ -1,4 +1,4 @@
-export const API_URL = "http://192.168.15.53:1100";
+export const API_URL = "https://listavip-backend2.ysrbxw.easypanel.host";
 
 //"http://localhost:1100"
 
