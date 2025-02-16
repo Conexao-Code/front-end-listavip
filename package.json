@@ -43,7 +43,8 @@
     "react-switch": "^7.0.0",
     "react-textfit": "^1.1.1",
     "react-toastify": "^10.0.6",
-    "svgo": "^2.8.0"
+    "svgo": "^2.8.0",
+    "swiper": "^11.2.4"
   },
   "devDependencies": {
     "@babel/core": "^7.21.4",
