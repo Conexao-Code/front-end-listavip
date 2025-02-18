@@ -75,7 +75,7 @@ export const ConteudoDesktop = (): JSX.Element => {
                         </div>
 
                         <div className="absolute w-[338px] top-[398px] left-0 [font-family:'Poppins',Helvetica] font-medium text-[#1b2026] text-xl tracking-[0] leading-[normal]">
-                            &gt; conheça nosso sistema
+                            > conheça nosso sistema
                         </div>
                     </div>
                 </div>

@@ -1,6 +1,5 @@
-import React, { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { Calendar, MapPin, ChevronLeft, ChevronRight } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { Calendar, MapPin, ArrowRight, Sparkles } from 'lucide-react';
 
 interface FeaturedEvent {
   id: number;
@@ -59,181 +58,172 @@ const featuredEvents: FeaturedEvent[] = [
     date: "20-22 Julho",
     location: "São Paulo, SP",
     category: "Tecnologia"
+  },
+  {
+    id: 7,
+    title: "Festival de Jazz",
+    image: "https://images.unsplash.com/photo-1514525253161-7a46d19cd819?auto=format&fit=crop&q=80",
+    date: "10-12 Agosto",
+    location: "Belo Horizonte, MG",
+    category: "Música"
   }
 ];
 
 export const FeaturedEvents = () => {
-  const [currentPage, setCurrentPage] = useState(0);
-  const [direction, setDirection] = useState(0);
-  
-  const itemsPerPage = {
-    mobile: 1,
-    tablet: 2,
-    desktop: 3
-  };
+  const [itemsPerPage, setItemsPerPage] = useState(7);
+  const [activeEventId, setActiveEventId] = useState<number | null>(null);
+  const duplicatedEvents = [...featuredEvents, ...featuredEvents];
 
-  const totalPages = Math.ceil(featuredEvents.length / itemsPerPage.desktop);
+  useEffect(() => {
+    const handleResize = () => {
+      const width = window.innerWidth;
+      if (width < 640) setItemsPerPage(4);
+      else if (width < 1024) setItemsPerPage(6);
+      else setItemsPerPage(8);
+    };
 
-  const nextPage = () => {
-    setDirection(1);
-    setCurrentPage((prev) => (prev + 1) % totalPages);
-  };
-
-  const prevPage = () => {
-    setDirection(-1);
-    setCurrentPage((prev) => (prev - 1 + totalPages) % totalPages);
-  };
-
-  const getVisibleEvents = () => {
-    const start = currentPage * itemsPerPage.desktop;
-    const end = start + itemsPerPage.desktop;
-    return featuredEvents.slice(start, end);
-  };
+    handleResize();
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   return (
-    <section className="py-20 bg-gray-900 relative overflow-hidden">
-      {/* Background gradient */}
-      <div className="absolute inset-0 bg-gradient-to-b from-gray-900 via-gray-900/95 to-gray-900/90 pointer-events-none" />
+    <section className="py-24 bg-gray-900 relative overflow-hidden">
+      {/* Animated background gradient */}
       
+      {/* Diagonal lines background */}
+      <div className="absolute inset-0 opacity-[0.03]">
+        <div className="absolute inset-0" style={{
+          backgroundImage: 'linear-gradient(45deg, #E1FF01 1px, transparent 1px), linear-gradient(-45deg, #E1FF01 1px, transparent 1px)',
+          backgroundSize: '60px 60px'
+        }} />
+      </div>
+
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
-          className="text-center mb-16"
-        >
-          <motion.div
-            initial={{ scale: 0.9, opacity: 0 }}
-            animate={{ scale: 1, opacity: 1 }}
-            transition={{ delay: 0.2 }}
-            className="inline-flex items-center gap-3 px-6 py-3 rounded-full bg-[#E1FF01]/10 mb-8 hover:bg-[#E1FF01]/20 transition-colors duration-300"
-          >
-            <span className="text-[#E1FF01] font-medium">Eventos Imperdíveis</span>
-          </motion.div>
-          <h2 className="text-4xl md:text-5xl font-bold mb-6 text-white">
-            Eventos em <span className="text-[#E1FF01]">Destaque</span>
+        <div className="text-center mb-20">
+
+          <h2 className="text-5xl md:text-6xl font-bold mb-8 text-white tracking-tight">
+            Eventos em{' '}
+            <span className="relative inline-block">
+              <span className="relative z-10 text-[#E1FF01] font-extrabold">Destaque</span>
+            </span>
           </h2>
-          <p className="text-gray-400 text-xl max-w-2xl mx-auto">
+          
+          {/* Description */}
+          <p className="text-gray-400 text-lg md:text-xl max-w-2xl mx-auto leading-relaxed font-light">
             Descubra os eventos mais aguardados gerenciados por nossa plataforma
           </p>
-        </motion.div>
+        </div>
+s
+        {/* Events Carousel */}
+        <div className="relative overflow-hidden py-8">
+          <div className="absolute left-0 top-0 bottom-0 w-32 bg-gradient-to-r from-gray-900 to-transparent z-10" />
+          <div className="absolute right-0 top-0 bottom-0 w-32 bg-gradient-to-l from-gray-900 to-transparent z-10" />
 
-        <div className="relative">
-          <div className="relative overflow-hidden">
-            <motion.div
-              className="flex gap-6"
-              initial={false}
-              animate={{
-                x: `calc(-${currentPage * 100}% - ${currentPage * 24}px)`,
-              }}
-              transition={{
-                type: "spring",
-                stiffness: 300,
-                damping: 30
-              }}
-            >
-              {featuredEvents.map((event) => (
-                <motion.div
-                  key={event.id}
-                  className="relative w-full sm:w-[calc(50%-12px)] lg:w-[calc(33.333%-16px)] flex-shrink-0"
-                  initial={{ opacity: 0, scale: 0.95 }}
-                  whileInView={{ opacity: 1, scale: 1 }}
-                  viewport={{ once: true }}
-                  whileHover={{ scale: 1.03 }}
+          <div className="flex gap-5 carousel"
+               style={{
+                 width: '200%',
+                 transform: 'translateZ(0)'
+               }}>
+            {duplicatedEvents.map((event, index) => (
+              <div
+                key={`${event.id}-${index}`}
+                className="relative flex-shrink-0 transition-all duration-500 group"
+                style={{
+                  width: `calc(${100 / itemsPerPage}% - 20px)`,
+                  minWidth: '280px'
+                }}
+              >
+                <div 
+                  className="relative h-[320px] rounded-2xl overflow-hidden cursor-pointer
+                           transform transition-all duration-500 group-hover:scale-[1.02]
+                           shadow-lg shadow-black/30"
+                  onClick={() => setActiveEventId(activeEventId === event.id ? null : event.id)}
                 >
-                  <div className="relative h-[400px] rounded-2xl overflow-hidden group cursor-pointer">
-                    {/* Background overlay with gradient */}
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/50 to-black/30 opacity-60 group-hover:opacity-80 transition-all duration-500 z-10" />
-                    
-                    {/* Event image */}
-                    <img
-                      src={event.image}
-                      alt={event.title}
-                      className="absolute inset-0 w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-700"
-                    />
+                  <img
+                    src={event.image}
+                    alt={event.title}
+                    className="absolute inset-0 w-full h-full object-cover transition-transform duration-700
+                             group-hover:scale-110"
+                  />
+                  
+                  {/* Gradient Overlay */}
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/95 via-black/50 to-transparent" />
+                  
+                  {/* Category Badge */}
+                  <div className="absolute top-4 left-4 z-20">
+                    <span className="px-4 py-2 bg-[#E1FF01] text-gray-900 rounded-full text-xs font-bold
+                                   shadow-lg shadow-black/20 backdrop-blur-sm tracking-wide
+                                   transform transition-transform duration-300 group-hover:scale-105">
+                      {event.category}
+                    </span>
+                  </div>
 
-                    {/* Event category badge */}
-                    <div className="absolute top-6 left-6 z-20">
-                      <span className="px-4 py-2 bg-[#E1FF01] text-gray-900 rounded-full text-sm font-semibold">
-                        {event.category}
-                      </span>
-                    </div>
-
-                    {/* Event details */}
-                    <div className="absolute inset-0 z-20 p-8 flex flex-col justify-end transform translate-y-4 group-hover:translate-y-0 transition-transform duration-500">
-                      <div className="space-y-4">
-                        <h3 className="text-2xl font-bold text-white group-hover:text-[#E1FF01] transition-colors duration-300">
-                          {event.title}
-                        </h3>
-                        
-                        <div className="flex flex-col sm:flex-row gap-3 text-gray-200 opacity-0 group-hover:opacity-100 transition-opacity duration-500 delay-100">
-                          <div className="flex items-center gap-2">
-                            <Calendar className="w-4 h-4 text-[#E1FF01]" />
-                            <span>{event.date}</span>
-                          </div>
-                          <div className="hidden sm:block text-[#E1FF01]">•</div>
-                          <div className="flex items-center gap-2">
-                            <MapPin className="w-4 h-4 text-[#E1FF01]" />
-                            <span>{event.location}</span>
-                          </div>
+                  {/* Content Overlay */}
+                  <div className={`absolute inset-0 flex flex-col justify-end p-8 transition-all duration-500
+                    ${activeEventId === event.id ? 'bg-black/80 backdrop-blur-sm' : 'hover:bg-black/60'}`}>
+                    <div className={`transform transition-all duration-500
+                      ${activeEventId === event.id ? 'translate-y-0 opacity-100' : 'translate-y-4 opacity-90'}`}>
+                      <h3 className="text-2xl font-bold text-white mb-4 leading-tight">
+                        {event.title}
+                      </h3>
+                      
+                      <div className="flex flex-col gap-3 text-gray-200 mb-6">
+                        <div className="flex items-center gap-2.5">
+                          <Calendar className="w-5 h-5 text-[#E1FF01]" strokeWidth={1.5} />
+                          <span className="text-sm font-medium">{event.date}</span>
                         </div>
-
-                        {/* Call to action button */}
-                        <motion.button
-                          whileHover={{ scale: 1.05 }}
-                          whileTap={{ scale: 0.95 }}
-                          className="mt-4 px-6 py-2 bg-[#E1FF01] text-gray-900 rounded-lg font-semibold 
-                                   opacity-0 group-hover:opacity-100 transition-opacity duration-500 delay-200
-                                   hover:bg-[#cde600] transition-colors"
-                        >
-                          Ver Detalhes
-                        </motion.button>
+                        <div className="flex items-center gap-2.5">
+                          <MapPin className="w-5 h-5 text-[#E1FF01]" strokeWidth={1.5} />
+                          <span className="text-sm font-medium">{event.location}</span>
+                        </div>
                       </div>
+
+                      <button className="inline-flex items-center gap-2 px-6 py-3 bg-[#E1FF01] text-gray-900 
+                                       rounded-xl font-bold text-sm tracking-wide
+                                       transform transition-all duration-300 group-hover:scale-105
+                                       hover:bg-white hover:shadow-lg hover:shadow-[#E1FF01]/20">
+                        Ver Detalhes
+                        <ArrowRight className="w-4 h-4 transition-transform duration-300 
+                                             group-hover:translate-x-1" />
+                      </button>
                     </div>
                   </div>
-                </motion.div>
-              ))}
-            </motion.div>
+                </div>
+              </div>
+            ))}
           </div>
-
-          {/* Navigation buttons */}
-          <div className="flex justify-between items-center mt-8">
-            <div className="flex gap-4 mx-auto">
-              {Array.from({ length: totalPages }).map((_, index) => (
-                <button
-                  key={index}
-                  onClick={() => {
-                    setDirection(index > currentPage ? 1 : -1);
-                    setCurrentPage(index);
-                  }}
-                  className={`w-3 h-3 rounded-full transition-all duration-300 ${
-                    currentPage === index
-                      ? 'bg-[#E1FF01] scale-125'
-                      : 'bg-[#E1FF01]/30 hover:bg-[#E1FF01]/50'
-                  }`}
-                />
-              ))}
-            </div>
-          </div>
-
-          {/* Arrow buttons */}
-          <button
-            onClick={prevPage}
-            className="absolute top-1/2 -translate-y-1/2 -left-4 md:-left-12 w-12 h-12 rounded-full bg-[#E1FF01] text-gray-900 flex items-center justify-center
-                     opacity-70 hover:opacity-100 transition-opacity transform hover:scale-105 active:scale-95"
-          >
-            <ChevronLeft className="w-6 h-6" />
-          </button>
-          <button
-            onClick={nextPage}
-            className="absolute top-1/2 -translate-y-1/2 -right-4 md:-right-12 w-12 h-12 rounded-full bg-[#E1FF01] text-gray-900 flex items-center justify-center
-                     opacity-70 hover:opacity-100 transition-opacity transform hover:scale-105 active:scale-95"
-          >
-            <ChevronRight className="w-6 h-6" />
-          </button>
         </div>
       </div>
+
+      <style jsx global>{`
+        @keyframes scroll {
+          0% { transform: translateX(0); }
+          100% { transform: translateX(-50%); }
+        }
+
+        .carousel {
+          animation: scroll 15s linear infinite;
+          will-change: transform;
+        }
+
+        @media (max-width: 640px) {
+          .carousel {
+            animation: scroll 20s linear infinite;
+          }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+          .carousel {
+            animation-duration: 35s;
+          }
+          @media (max-width: 640px) {
+            .carousel {
+              animation-duration: 30s;
+            }
+          }
+        }
+      `}</style>
     </section>
   );
 };

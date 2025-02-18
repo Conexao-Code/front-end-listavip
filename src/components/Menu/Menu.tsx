@@ -156,5 +156,3 @@ export const Menu = (): JSX.Element => {
 };
 
 export default Menu;
-
-

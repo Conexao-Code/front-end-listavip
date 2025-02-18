@@ -25,7 +25,7 @@ export const ConteudoMobile = (): JSX.Element => {
                         </div>
 
                         <div className="absolute w-[353px] top-[170px] left-0 [font-family:'Poppins',Helvetica] font-medium text-[#1b2026] text-base tracking-[0] leading-[normal]">
-                            &gt; conheça nosso sistema
+                            > conheça nosso sistema
                         </div>
                     </div>
 

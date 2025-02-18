@@ -7,6 +7,7 @@ export default {
         'card-float': 'float 6s ease-in-out infinite',
         'card-shine': 'shine 3s linear infinite',
         'card-tilt': 'tiltCard 8s ease-in-out infinite',
+        'pulse-slow': 'pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',
       },
       keyframes: {
         float: {
