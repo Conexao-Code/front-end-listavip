@@ -1,4 +1,4 @@
-export const API_URL = "https://listavip-backend2.ysrbxw.easypanel.host";
+export const API_URL = "https://api.conexaocode.com";
 
 //"http://localhost:1100"
 
